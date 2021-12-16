@@ -324,7 +324,7 @@ func initAsset() {
 					})
 				}
 				if len(cks) == 0 {
-					return "你尚未绑定🐶东账号，请私聊我你的账号信息或者对我说“登录”。"
+					return "你尚未绑定京东账号，请私聊我你的账号信息或者对我说“登录”。"
 				}
 				if s.GetImType() == "wxmp" {
 					cs := []chan string{}
@@ -795,7 +795,7 @@ func (ck *JdCookie) QueryAsset() string {
 				return ""
 			}
 			if asset.RedPacket.Total != 0 {
-				msgs = append(msgs, fmt.Sprintf("所有红包：%.2f%s元🧧", asset.RedPacket.Total, e(asset.RedPacket.ToExpire)))
+				msgs = append(msgs, fmt.Sprintf("所有红包：%.2f%s元", asset.RedPacket.Total, e(asset.RedPacket.ToExpire)))
 				if asset.RedPacket.Jx != 0 {
 					msgs = append(msgs, fmt.Sprintf("京喜红包：%.2f%s元", asset.RedPacket.Jx, e(asset.RedPacket.ToExpireJx)))
 				}
@@ -817,17 +817,17 @@ func (ck *JdCookie) QueryAsset() string {
 		msgs = append(msgs, fmt.Sprintf("东东萌宠：%s", <-pet))
 		gn := <-gold
 		if gn >= 30000 {
-			msgs = append(msgs, fmt.Sprintf("极速金币：%d(≈%.2f元)💰", gn, float64(gn)/10000))
+			msgs = append(msgs, fmt.Sprintf("极速金币：%d(≈%.2f元)", gn, float64(gn)/10000))
 		}
 		zjbn := <-zjb
 		if zjbn >= 50000 {
-			msgs = append(msgs, fmt.Sprintf("京东赚赚：%d金币(≈%.2f元)💰", zjbn, float64(zjbn)/10000))
+			msgs = append(msgs, fmt.Sprintf("京东赚赚：%d金币(≈%.2f元)", zjbn, float64(zjbn)/10000))
 		} else {
 			// msgs = append(msgs, fmt.Sprintf("京东赚赚：暂无数据"))
 		}
 		mmcCoin := <-mmc
 		if mmcCoin >= 3000 {
-			msgs = append(msgs, fmt.Sprintf("京东秒杀：%d秒秒币(≈%.2f元)💰", mmcCoin, float64(mmcCoin)/1000))
+			msgs = append(msgs, fmt.Sprintf("京东秒杀：%d秒秒币(≈%.2f元)", mmcCoin, float64(mmcCoin)/1000))
 		} else {
 			// msgs = append(msgs, fmt.Sprintf("京东秒杀：暂无数据"))
 		}
@@ -836,7 +836,7 @@ func (ck *JdCookie) QueryAsset() string {
 			msgs = append(msgs, fmt.Sprintf("推一推券：%s", tyt))
 		}
 		if egg := <-egg; egg != 0 {
-			msgs = append(msgs, fmt.Sprintf("惊喜牧场：%d枚鸡蛋🥚", egg))
+			msgs = append(msgs, fmt.Sprintf("惊喜牧场：%d枚鸡蛋", egg))
 		}
 		// if ck.Note != "" {
 		// 	msgs = append([]string{
@@ -1098,12 +1098,12 @@ func initFarm(cookie string, state chan string) {
 		rt = "数据异常"
 	} else {
 		if a.TreeState == 2 || a.TreeState == 3 {
-			rt += "已可领取⏰"
+			rt += "已可领取，领取地址（京东APP-我的-东东农场），领完记得重新种植。"
 			not = rt
 		} else if a.TreeState == 1 {
 			rt += fmt.Sprintf("种植中，进度%.2f%%🍒", 100*float64(a.FarmUserPro.TreeEnergy)/float64(a.FarmUserPro.TreeTotalEnergy))
 		} else if a.TreeState == 0 {
-			rt = "您忘了种植新的水果⏰"
+			rt = "您忘了种植新的水果，种植地址（京东APP-我的-东东农场）。"
 			not = rt
 		}
 	}
@@ -1198,22 +1198,22 @@ func initPetTown(cookie string, state chan string) {
 	not := ""
 	if a.Code == "0" && a.ResultCode == "0" && a.Message == "success" {
 		if a.Result.UserStatus == 0 {
-			rt = "请手动开启活动⏰"
+			rt = "请手动开启活动,，开启地址（京东APP-我的-东东萌宠）。"
 			not = rt
 
 		} else if a.Result.GoodsInfo.GoodsName == "" {
-			rt = "你忘了选购新的商品⏰"
+			rt = "你忘了选购新的商品，选购地址（京东APP-我的-东东萌宠）。"
 			not = rt
 
 		} else if a.Result.PetStatus == 5 {
-			rt = a.Result.GoodsInfo.GoodsName + "已可领取⏰"
+			rt = a.Result.GoodsInfo.GoodsName + "已可领取，领取地址（京东APP-我的-东东萌宠）。"
 			not = rt
 
 		} else if a.Result.PetStatus == 6 {
-			rt = a.Result.GoodsInfo.GoodsName + "未继续领养新的物品⏰"
+			rt = a.Result.GoodsInfo.GoodsName + "未继续领养新的物品，选购地址（京东APP-我的-东东萌宠）。"
 			not = rt
 		} else {
-			rt = a.Result.GoodsInfo.GoodsName + fmt.Sprintf("领养中，进度%.2f%%，勋章%d/%d🐶", a.Result.MedalPercent, a.Result.MedalNum, a.Result.GoodsInfo.ExchangeMedalNum)
+			rt = a.Result.GoodsInfo.GoodsName + fmt.Sprintf("领养中，进度%.2f%%，勋章%d/%d", a.Result.MedalPercent, a.Result.MedalNum, a.Result.GoodsInfo.ExchangeMedalNum)
 		}
 	} else {
 		rt = "数据异常"
@@ -1403,7 +1403,7 @@ func tytCoupon(cookie string, state chan string) {
 		} else {
 			rt = fmt.Sprintf("%d张5元优惠券", num)
 			if toexp > 0 {
-				rt += fmt.Sprintf("(今天将过期%d张)⏰", toexp)
+				rt += fmt.Sprintf("(今天将过期%d张)", toexp)
 			} else {
 				rt += "🎰"
 			}
@@ -1949,10 +1949,10 @@ func dream(cookie string, state chan string) {
 		var production = a.Data.ProductionList[0]
 		if production.InvestedElectric >= production.NeedElectric {
 			if production.ExchangeStatus == 1 {
-				desc = "可以兑换商品了"
+				desc = "可以兑换商品了，兑换地址（京喜APP-我的-京喜工厂）。"
 			}
 			if production.ExchangeStatus == 3 {
-				desc = "商品兑换已超时，请选择新商品进行制造"
+				desc = "商品兑换已超时，请选择新商品进行制造，选购地址（京喜APP-我的-京喜工厂）。"
 			}
 			// await exchangeProNotify()
 		} else {
@@ -1962,9 +1962,9 @@ func dream(cookie string, state chan string) {
 		}
 	} else {
 		if len(a.Data.FactoryList) == 0 {
-			desc = "请手动开启活动"
+			desc = "请手动开启活动，开启地址（京喜APP-我的-京喜工厂）。"
 		} else if len(a.Data.ProductionList) == 0 {
-			desc = "请手动选购商品进行生产"
+			desc = "请手动选购商品进行生产，选购地址（京喜APP-我的-京喜工厂）。"
 		}
 	}
 	desc += "🏭"
